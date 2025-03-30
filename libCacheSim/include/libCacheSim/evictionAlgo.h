@@ -132,6 +132,9 @@ cache_t *RandomLRU_init(const common_cache_params_t ccache_params, const char *c
 
 cache_t *ThreeLCache_init(const common_cache_params_t ccache_params, const char *cache_specific_params);
 
+//Gunhee Choi Code
+cache_t *MyCache_init(const common_cache_params_t ccache_params, const char *cache_specific_params);
+
 #ifdef ENABLE_LRB
 cache_t *LRB_init(const common_cache_params_t ccache_params, const char *cache_specific_params);
 #endif

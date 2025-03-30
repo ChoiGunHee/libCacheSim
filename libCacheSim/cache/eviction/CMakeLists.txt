@@ -42,6 +42,8 @@ set(sourceC
         Sieve.c
 
         RandomLRU.c
+
+        MyCache.c
 )
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/priv")
