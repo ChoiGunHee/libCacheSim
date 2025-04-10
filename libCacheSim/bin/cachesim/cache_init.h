@@ -171,6 +171,9 @@ static inline cache_t *create_cache(const char *trace_path, const char *eviction
   } else if(strcasecmp(eviction_algo, "mycache") == 0) {
     // Gunhee Choi Code
     cache = MyCache_init(cc_params, eviction_params);
+  } else if(strcasecmp(eviction_algo, "meflics-fifo") == 0) {
+    // Gunhee Choi, MeFLICS_fifo Code
+    cache = MEFLIC_FIFO_init(cc_params, eviction_params);
   } else {
     ERROR("do not support algorithm %s\n", eviction_algo);
     abort();

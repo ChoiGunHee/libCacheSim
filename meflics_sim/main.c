@@ -9,7 +9,6 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "Usage: %s <workload_file> <cache_size_multiple> <eviction_policy>\n", argv[0]);
     return 1;
   }
-
   const char* workload_file = argv[1];
 
   // 캐시 사이즈 정수로 파싱
@@ -45,6 +44,8 @@ int main(int argc, char* argv[]) {
       break;
     case 6:
       printf("Eviction policy : Mycache\n");
+    case 7:
+      printf("Eviction policy : MEFLICS\n");
       break;
     default:
       break;
@@ -87,6 +88,9 @@ int main(int argc, char* argv[]) {
       break;
     case 6:
       cache = MyCache_init(cc_params, NULL);
+    case 7 :
+      cache = MEFLIC_FIFO_init(cc_params, NULL);
+      break;
     default:
       break;
   }
@@ -106,7 +110,6 @@ int main(int argc, char* argv[]) {
   printf("hit ratio: %.4lf\n", (double)n_hit / n_req);
   printf("hit : %d, req : %d\n", n_hit, n_req);
   printf("--------------------------------\n\n");
-  printf("anjsep\n");
   /* cleaning */
   close_trace(reader);
   free_request(req);

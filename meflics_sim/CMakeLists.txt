@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
-project(gli_cache)
-
+project(MEFLICS_SIM)
+set(EXECUTABLE_NAME "MEFLICS_SIM")
 message("****************** this example only works after libCacheSim has been installed ******************")
 
 find_library(libCacheSim libCacheSim)
@@ -23,7 +23,7 @@ link_directories(${ZSTD_LIBRARY_DIRS})
 add_definitions(${ZSTD_CFLAGS_OTHER})
 
 # 실행파일 정의
-add_executable(gli_cache main.c)
+add_executable(MEFLICS_SIM main.c)
 
 # 링크 설정
-target_link_libraries(gli_cache libCacheSim m ${GLIB2_LIBRARIES} ${ZSTD_LIBRARIES})
+target_link_libraries(MEFLICS_SIM libCacheSim m ${GLIB2_LIBRARIES} ${ZSTD_LIBRARIES})
