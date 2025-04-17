@@ -45,6 +45,7 @@ set(sourceC
 
         MyCache.c
         MEFLICS_fifo.c
+        MEFLICS_fsc.c
 )
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/priv")

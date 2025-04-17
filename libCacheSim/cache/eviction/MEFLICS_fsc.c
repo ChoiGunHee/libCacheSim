@@ -1,14 +1,7 @@
 //
-//  first in first out
-//
-//
-//  FIFO.c
-//  libCacheSim
-//
-//  Created by Juncheng on 12/4/18.
-//  Copyright © 2018 Juncheng. All rights reserved.
-//
-//  --> MEFLICS_fifo.c :  Same source code as FIFO.c
+//  first in first out with seconed chacne
+////
+//  --> MEFLICS_fsc.c
 //  by Gunhee Choi, 2025.04.09
 //
 
@@ -25,14 +18,16 @@ extern "C" {
 // ****                                                               ****
 // ***********************************************************************
 
-static void MEFLIC_FIFO_parse_params(cache_t *cache, const char *cache_specific_params);
-static void MEFLIC_FIFO_free(cache_t *cache);
-static bool MEFLIC_FIFO_get(cache_t *cache, const request_t *req);
-static cache_obj_t *MEFLIC_FIFO_find(cache_t *cache, const request_t *req, const bool update_cache);
-static cache_obj_t *MEFLIC_FIFO_insert(cache_t *cache, const request_t *req);
-static cache_obj_t *MEFLIC_FIFO_to_evict(cache_t *cache, const request_t *req);
-static void MEFLIC_FIFO_evict(cache_t *cache, const request_t *req);
-static bool MEFLIC_FIFO_remove(cache_t *cache, const obj_id_t obj_id);
+static void MEFLIC_FSC_parse_params(cache_t *cache,
+                                     const char *cache_specific_params);
+static void MEFLIC_FSC_free(cache_t *cache);
+static bool MEFLIC_FSC_get(cache_t *cache, const request_t *req);
+static cache_obj_t *MEFLIC_FSC_find(cache_t *cache, const request_t *req,
+                                     const bool update_cache);
+static cache_obj_t *MEFLIC_FSC_insert(cache_t *cache, const request_t *req);
+static cache_obj_t *MEFLIC_FSC_to_evict(cache_t *cache, const request_t *req);
+static void MEFLIC_FSC_evict(cache_t *cache, const request_t *req);
+static bool MEFLIC_FSC_remove(cache_t *cache, const obj_id_t obj_id);
 
 // ***********************************************************************
 // ****                                                               ****
@@ -41,22 +36,27 @@ static bool MEFLIC_FIFO_remove(cache_t *cache, const obj_id_t obj_id);
 // ****                       init, free, get                         ****
 // ***********************************************************************
 
+bool cache_can_insert(cache_t *cache, uint64_t obj_size) {
+    return (cache->get_occupied_byte(cache) + obj_size <= cache->cache_size);
+}
+
 /**
  * @brief initialize a ARC cache
  *
  * @param ccache_params some common cache parameters
  * @param cache_specific_params ARC specific parameters, should be NULL
  */
-cache_t *MEFLIC_FIFO_init(const common_cache_params_t ccache_params, const char *cache_specific_params) {
-  cache_t *cache = cache_struct_init("MEFLICS_FIFO", ccache_params, cache_specific_params);
-  cache->cache_init = MEFLIC_FIFO_init;
-  cache->cache_free = MEFLIC_FIFO_free;
-  cache->get = MEFLIC_FIFO_get;
-  cache->find = MEFLIC_FIFO_find;
-  cache->insert = MEFLIC_FIFO_insert;
-  cache->evict = MEFLIC_FIFO_evict;
-  cache->remove = MEFLIC_FIFO_remove;
-  cache->to_evict = MEFLIC_FIFO_to_evict;
+cache_t *MEFLIC_FSC_init(const common_cache_params_t ccache_params,
+                          const char *cache_specific_params) {
+  cache_t *cache = cache_struct_init("MEFLICS_FSC", ccache_params, cache_specific_params);
+  cache->cache_init = MEFLIC_FSC_init;
+  cache->cache_free = MEFLIC_FSC_free;
+  cache->get = MEFLIC_FSC_get;
+  cache->find = MEFLIC_FSC_find;
+  cache->insert = MEFLIC_FSC_insert;
+  cache->evict = MEFLIC_FSC_evict;
+  cache->remove = MEFLIC_FSC_remove;
+  cache->to_evict = MEFLIC_FSC_to_evict;
   cache->get_occupied_byte = cache_get_occupied_byte_default;
   cache->get_n_obj = cache_get_n_obj_default;
   cache->can_insert = cache_can_insert_default;
@@ -67,8 +67,8 @@ cache_t *MEFLIC_FIFO_init(const common_cache_params_t ccache_params, const char 
   params->q_head = NULL;
   params->q_tail = NULL;
 
-  // Test, Gunhee
-  printf("Inside msg : MEFLICS FIFO cache initialized\n");
+  //Test, Gunhee
+  printf("Inside msg : MEFLICS FSC cache initialized\n");
   return cache;
 }
 
@@ -77,7 +77,7 @@ cache_t *MEFLIC_FIFO_init(const common_cache_params_t ccache_params, const char 
  *
  * @param cache
  */
-static void MEFLIC_FIFO_free(cache_t *cache) {
+static void MEFLIC_FSC_free(cache_t *cache) {
   free(cache->eviction_params);
   cache_struct_free(cache);
 }
@@ -101,8 +101,21 @@ static void MEFLIC_FIFO_free(cache_t *cache) {
  * @param req
  * @return true if cache hit, false if cache miss
  */
-static bool MEFLIC_FIFO_get(cache_t *cache, const request_t *req) { return cache_get_base(cache, req); }
+static bool MEFLIC_FSC_get(cache_t *cache, const request_t *req) {
+    cache_obj_t *obj = cache_find_base(cache, req, true);
+    if (obj != NULL) {
+        obj->second_chance = true; // hit된 객체에 두 번째 기회를 부여
+        return true;
+    }
 
+    // 객체가 없으면 삽입
+    MEFLIC_FSC_insert(cache, req);
+
+    //Test, Gunhee
+    printf("Inside msg : MEFLICS FSC cache get\n");
+    return false;
+}
+  
 // ***********************************************************************
 // ****                                                               ****
 // ****       developer facing APIs (used by cache developer)         ****
@@ -119,10 +132,11 @@ static bool MEFLIC_FIFO_get(cache_t *cache, const request_t *req) { return cache
  *  and if the object is expired, it is removed from the cache
  * @return the object or NULL if not found
  */
-static cache_obj_t *MEFLIC_FIFO_find(cache_t *cache, const request_t *req, const bool update_cache) {
-  // Test, Gunhee
-  printf("Inside msg : MEFLICS FIFO cache Find\n");
-
+static cache_obj_t *MEFLIC_FSC_find(cache_t *cache, const request_t *req,
+                                     const bool update_cache) {
+  //Test, Gunhee
+  printf("Inside msg : MEFLICS FSC cache Find\n");
+  
   return cache_find_base(cache, req, update_cache);
 }
 
@@ -136,15 +150,22 @@ static cache_obj_t *MEFLIC_FIFO_find(cache_t *cache, const request_t *req, const
  * @param req
  * @return the inserted object
  */
-static cache_obj_t *MEFLIC_FIFO_insert(cache_t *cache, const request_t *req) {
-  FIFO_params_t *params = (FIFO_params_t *)cache->eviction_params;
-  cache_obj_t *obj = cache_insert_base(cache, req);
-  prepend_obj_to_head(&params->q_head, &params->q_tail, obj);
+static cache_obj_t *MEFLIC_FSC_insert(cache_t *cache, const request_t *req) {
+    FIFO_params_t *params = (FIFO_params_t *)cache->eviction_params;
+    // 캐시가 가득 찬 경우 eviction 수행
+    while (!cache_can_insert(cache, req->obj_size)) {
+        MEFLIC_FSC_evict(cache, req);
+    }
 
-  // Test, Gunhee
-  printf("Inside msg : MEFLICS FIFO cache Insert\n");
+    cache_obj_t *obj = cache_insert_base(cache, req);
+    prepend_obj_to_head(&params->q_head, &params->q_tail, obj);
 
-  return obj;
+    obj->second_chance = false; // 새로 삽입된 객체는 두 번째 기회를 갖지 않음
+
+    // Test, Gunhee
+    printf("Object %d inserted into cache\n", req->obj_id);
+
+    return obj;
 }
 
 /**
@@ -157,11 +178,11 @@ static cache_obj_t *MEFLIC_FIFO_insert(cache_t *cache, const request_t *req) {
  * @param cache the cache
  * @return the object to be evicted
  */
-static cache_obj_t *MEFLIC_FIFO_to_evict(cache_t *cache, const request_t *req) {
+static cache_obj_t *MEFLIC_FSC_to_evict(cache_t *cache, const request_t *req) {
   FIFO_params_t *params = (FIFO_params_t *)cache->eviction_params;
 
-  // Test, Gunhee
-  printf("Inside msg : MEFLICS FIFO cache evict\n");
+    //Test, Gunhee
+    printf("Inside msg : MEFLICS FSC cache evict\n");
   return params->q_tail;
 }
 
@@ -174,28 +195,34 @@ static cache_obj_t *MEFLIC_FIFO_to_evict(cache_t *cache, const request_t *req) {
  * @param req not used
  * @param evicted_obj if not NULL, return the evicted object to caller
  */
-static void MEFLIC_FIFO_evict(cache_t *cache, const request_t *req) {
-  FIFO_params_t *params = (FIFO_params_t *)cache->eviction_params;
-  cache_obj_t *obj_to_evict = params->q_tail;
-  DEBUG_ASSERT(params->q_tail != NULL);
+static void MEFLIC_FSC_evict(cache_t *cache, const request_t *req) {
+    FIFO_params_t *params = (FIFO_params_t *)cache->eviction_params;
+    cache_obj_t *obj_to_evict = params->q_tail;
+    DEBUG_ASSERT(params->q_tail != NULL);
 
-  // we can simply call remove_obj_from_list here, but for the best performance,
-  // we chose to do it manually
-  // remove_obj_from_list(&params->q_head, &params->q_tail, obj);
+    // 순회하면서 두 번째 기회를 모두 소진한 객체를 찾음
+    while (obj_to_evict->second_chance) {
+        obj_to_evict->second_chance = false; // 두 번째 기회를 소진
+        remove_obj_from_list(&params->q_head, &params->q_tail, obj_to_evict);
+        prepend_obj_to_head(&params->q_head, &params->q_tail, obj_to_evict);
 
-  params->q_tail = params->q_tail->queue.prev;
-  if (likely(params->q_tail != NULL)) {
-    params->q_tail->queue.next = NULL;
-  } else {
-    /* cache->n_obj has not been updated */
-    DEBUG_ASSERT(cache->n_obj == 1);
-    params->q_head = NULL;
-  }
+        // 다음 객체로 이동
+        obj_to_evict = params->q_tail;
+        DEBUG_ASSERT(obj_to_evict != NULL); // 캐시가 비어 있지 않아야 함
+    }
 
-  // 퇴출될 객체 정보 출력
-  printf("Evicting object: ID=%d, Size=%lu\n", obj_to_evict->obj_id, obj_to_evict->obj_size);
+    // 두 번째 기회가 없는 객체를 실제로 제거
+    params->q_tail = params->q_tail->queue.prev;
+    if (likely(params->q_tail != NULL)) {
+        params->q_tail->queue.next = NULL;
+    } else {
+        params->q_head = NULL;
+    }
 
-  cache_evict_base(cache, obj_to_evict, true);
+    // 퇴출될 객체 정보 출력
+    printf("Evicting object: ID=%d, Size=%lu\n", obj_to_evict->obj_id, obj_to_evict->obj_size);
+
+    cache_evict_base(cache, obj_to_evict, true);
 }
 
 /**
@@ -211,7 +238,7 @@ static void MEFLIC_FIFO_evict(cache_t *cache, const request_t *req) {
  * @return true if the object is removed, false if the object is not in the
  * cache
  */
-static bool MEFLIC_FIFO_remove(cache_t *cache, const obj_id_t obj_id) {
+static bool MEFLIC_FSC_remove(cache_t *cache, const obj_id_t obj_id) {
   cache_obj_t *obj = hashtable_find_obj_id(cache->hashtable, obj_id);
   if (obj == NULL) {
     return false;

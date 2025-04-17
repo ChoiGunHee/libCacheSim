@@ -45,7 +45,10 @@ int main(int argc, char* argv[]) {
     case 6:
       printf("Eviction policy : Mycache\n");
     case 7:
-      printf("Eviction policy : MEFLICS\n");
+      printf("Eviction policy : MEFLICS-FIFO\n");
+      break;
+    case 8:
+      printf("Eviction policy : MEFLICS-FSC\n");
       break;
     default:
       break;
@@ -65,7 +68,9 @@ int main(int argc, char* argv[]) {
   request_t* req = new_request();
 
   /* create a cache */
-  common_cache_params_t cc_params = {.cache_size = cache_size_multiple * 1024 * 1024U};
+  // common_cache_params_t cc_params = {.cache_size = cache_size_multiple * 1024 * 1024U};
+  common_cache_params_t cc_params = {.cache_size = 500};
+  
   cache_t* cache;
   switch (eviction) {
     case 0: //FIFO
@@ -91,6 +96,9 @@ int main(int argc, char* argv[]) {
     case 7 :
       cache = MEFLIC_FIFO_init(cc_params, NULL);
       break;
+    case 8 :
+      cache = MEFLIC_FSC_init(cc_params, NULL);
+      break;
     default:
       break;
   }
@@ -109,6 +117,11 @@ int main(int argc, char* argv[]) {
 
   printf("hit ratio: %.4lf\n", (double)n_hit / n_req);
   printf("hit : %d, req : %d\n", n_hit, n_req);
+
+  printf("Cache Size : %d\n", cache->cache_size);
+  printf("Data Size : %d\n", cache->get_occupied_byte(cache));
+  printf("Number of objects : %d\n", cache->get_n_obj(cache));
+
   printf("--------------------------------\n\n");
   /* cleaning */
   close_trace(reader);
