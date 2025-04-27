@@ -151,6 +151,7 @@ typedef struct cache_obj {
   uint64_t obj_size;
 
   //Gunhee Choi code
+  int_fast64_t hit_count;
   bool second_chance;
   // end of Gunhee Choi code
   
