@@ -72,7 +72,18 @@ int main(int argc, char* argv[]) {
       printf("[Progress] req = %lu, hit = %lu (hit ratio = %.4lf)\n", n_req, n_hit, (double)n_hit / n_req);
       printf("Cache Used Bytes = %ld / %ld\n", cache->get_occupied_byte(cache), cache->cache_size);
       printf("Cache Object Count = %ld\n", cache->get_n_obj(cache));
+      MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
+      printf("First Queue Accesses: %d, Hits: %d, Hit Rate: %.4lf\n",
+             params->first_access_count, params->first_hit_count,
+             (double)params->first_hit_count / params->first_access_count);
+    
+      printf("Second Queue Accesses: %d, Hits: %d, Hit Rate: %.4lf\n",
+             params->second_access_count, params->second_hit_count,
+             (double)params->second_hit_count / params->second_access_count);
+      printf("=====================\n");
+      
       printf("------------------------------------------\n");
+
     }
   }
 
