@@ -142,27 +142,55 @@ static bool MEFLICS_2Q_FF_get(cache_t *cache, const request_t *req) {
 static cache_obj_t *MEFLICS_2Q_FF_find(cache_t *cache, const request_t *req, const bool update_cache) {
     MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
 
-    // First queue access count 증가
     params->first_access_count++;
-
     cache_obj_t *obj = params->first->find(params->first, req, update_cache);
-    if (obj) {
+
+    if (obj && obj != (cache_obj_t *)0x1) {  // 실제 객체만 카운트
         obj->hit_count++;
+    }
+    if (obj) {
         params->first_hit_count++;
         return obj;
     }
 
-    // Second queue access count 증가
     params->second_access_count++;
-
     obj = params->second->find(params->second, req, update_cache);
-    if (obj) {
+
+    if (obj && obj != (cache_obj_t *)0x1) {
         obj->hit_count++;
+    }
+    if (obj) {
         params->second_hit_count++;
     }
 
     return obj;
 }
+
+
+// static cache_obj_t *MEFLICS_2Q_FF_find(cache_t *cache, const request_t *req, const bool update_cache) {
+//     MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
+
+//     // First queue access count 증가
+//     params->first_access_count++;
+
+//     cache_obj_t *obj = params->first->find(params->first, req, update_cache);
+//     if (obj) {
+//         obj->hit_count++;
+//         params->first_hit_count++;
+//         return obj;
+//     }
+
+//     // Second queue access count 증가
+//     params->second_access_count++;
+
+//     obj = params->second->find(params->second, req, update_cache);
+//     if (obj) {
+//         obj->hit_count++;
+//         params->second_hit_count++;
+//     }
+
+//     return obj;
+// }
 
 
 static cache_obj_t *MEFLICS_2Q_FF_insert(cache_t *cache, const request_t *req) {

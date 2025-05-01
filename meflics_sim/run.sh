@@ -6,4 +6,5 @@
 
 echo "Running..."
 
-./build/MEFLICS_SIM /home/choi_gunhee/my_projects/libCacheSim/data/test.csv 8 LHD LRU
+#./build/MEFLICS_SIM /home/choi_gunhee/my_projects/libCacheSim/data/test.csv 8 FIFO LHD
+./build/MEFLICS_SIM /home/choi_gunhee/mnt_sdb/cachelib_kv/merged_kvcache_2206.csv 8 FIFO LHD
