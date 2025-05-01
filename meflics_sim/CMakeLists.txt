@@ -23,7 +23,7 @@ link_directories(${ZSTD_LIBRARY_DIRS})
 add_definitions(${ZSTD_CFLAGS_OTHER})
 
 # 실행파일 정의
-add_executable(MEFLICS_SIM main.c)
+add_executable(MEFLICS_SIM main.cpp)
 
 # 링크 설정
 target_link_libraries(MEFLICS_SIM libCacheSim m ${GLIB2_LIBRARIES} ${ZSTD_LIBRARIES})

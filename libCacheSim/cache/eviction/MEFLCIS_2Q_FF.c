@@ -5,14 +5,22 @@
 extern "C" {
 #endif
 
-typedef struct {
-    cache_t *first;
-    cache_t *second;
-    bool enable_hit_promotion; // New flag: true if only hit objects are promoted
-} MEFLICS_2Q_FF_params_t;
+// // Gunhee Choi Code
+// // MEFLICS-2Q-FF parameter struct
+// typedef struct {
+//     cache_t *first;
+//     cache_t *second;
+//     bool enable_hit_promotion;
+  
+//     int first_hit_count;
+//     int second_hit_count;
+//     int first_access_count;
+//     int second_access_count;
+//   } MEFLICS_2Q_FF_params_t;
+//   // end of Gunhee Choi Code
 
 // Default setup
-static const char *DEFAULT_CACHE_PARAMS = "first-ratio=0.5,hit-promotion=false";
+static const char *DEFAULT_CACHE_PARAMS = "first-ratio=0.5,first=FIFO,second=FIFO,hit-promotion=false";
 
 // Function Declarations
 cache_t *MEFLICS_2Q_FF_init(const common_cache_params_t ccache_params, const char *cache_specific_params);
@@ -33,6 +41,18 @@ static double parse_first_ratio(const char *params);
 
 // Implementation
 
+static cache_t *create_cache_by_policy(const char *policy_name, common_cache_params_t params) {
+    if (strcasecmp(policy_name, "FIFO") == 0) return FIFO_init(params, NULL);
+    if (strcasecmp(policy_name, "LRU") == 0) return LRU_init(params, NULL);
+    if (strcasecmp(policy_name, "LFU") == 0) return LFU_init(params, NULL);
+    if (strcasecmp(policy_name, "ARC") == 0) return ARC_init(params, NULL);
+    if (strcasecmp(policy_name, "TwoQ") == 0) return TwoQ_init(params, NULL);
+    if (strcasecmp(policy_name, "LHD") == 0) return LHD_init(params, NULL);
+    if (strcasecmp(policy_name, "LeCaR") == 0) return LeCaR_init(params, NULL);
+    fprintf(stderr, "Unknown cache policy: %s\n", policy_name);
+    return NULL;
+}
+
 cache_t *MEFLICS_2Q_FF_init(const common_cache_params_t ccache_params, const char *cache_specific_params) {
     cache_t *cache = cache_struct_init("MEFLICS_2Q_FF", ccache_params, cache_specific_params);
     cache->cache_init = MEFLICS_2Q_FF_init;
@@ -47,34 +67,62 @@ cache_t *MEFLICS_2Q_FF_init(const common_cache_params_t ccache_params, const cha
     cache->get_n_obj = MEFLICS_2Q_FF_get_n_obj;
     cache->can_insert = MEFLICS_2Q_FF_can_insert;
 
+
     cache->eviction_params = malloc(sizeof(MEFLICS_2Q_FF_params_t));
     memset(cache->eviction_params, 0, sizeof(MEFLICS_2Q_FF_params_t));
     MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
+    // cache->eviction_params = malloc(sizeof(MEFLICS_2Q_FF_params_t));
+    // memset(cache->eviction_params, 0, sizeof(MEFLICS_2Q_FF_params_t));
+    // MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
 
     // 💥 먼저 기본 first, second 생성
     double first_ratio = 0.5;
-    // 2. 사용자가 넘긴 값 반영
+    char first_policy[32] = "FIFO";
+    char second_policy[32] = "FIFO";
+
+    // Parse cache-specific params for ratios and policies
     if (cache_specific_params) {
-        first_ratio = parse_first_ratio(cache_specific_params);
+        char *params_copy = strdup(cache_specific_params);
+        char *token, *saveptr;
+        token = strtok_r(params_copy, ",", &saveptr);
+        while (token) {
+            char *equal = strchr(token, '=');
+            if (equal) {
+                *equal = '\0';
+                const char *key = token;
+                const char *value = equal + 1;
+                if (strcasecmp(key, "first-ratio") == 0) {
+                    first_ratio = atof(value);
+                } else if (strcasecmp(key, "first") == 0) {
+                    strncpy(first_policy, value, sizeof(first_policy)-1);
+                } else if (strcasecmp(key, "second") == 0) {
+                    strncpy(second_policy, value, sizeof(second_policy)-1);
+                }
+            }
+            token = strtok_r(NULL, ",", &saveptr);
+        }
+        free(params_copy);
     }
-    // 3. 비율에 맞게 First, Second 캐시 생성
-    common_cache_params_t local_params = ccache_params;
-    int64_t first_size = (int64_t)(ccache_params.cache_size * first_ratio);
-    int64_t second_size = ccache_params.cache_size - first_size;
 
-    local_params.cache_size = first_size;
-    params->first = FIFO_init(local_params, NULL);
-
-    local_params.cache_size = second_size;
-    params->second = FIFO_init(local_params, NULL);
-
-    // 4. 나머지 세부 옵션 파싱
-    MEFLICS_2Q_FF_parse_params(cache, DEFAULT_CACHE_PARAMS);
-    if (cache_specific_params) {
+        // Init first and second queues
+        common_cache_params_t local_params = ccache_params;
+        int64_t first_size = (int64_t)(ccache_params.cache_size * first_ratio);
+        int64_t second_size = ccache_params.cache_size - first_size;
+    
+        local_params.cache_size = first_size;
+        params->first = create_cache_by_policy(first_policy, local_params);
+        local_params.cache_size = second_size;
+        params->second = create_cache_by_policy(second_policy, local_params);
+    
+        // Fallback if any failed
+        if (!params->first || !params->second) {
+            fprintf(stderr, "Failed to initialize one of the queues\n");
+            return NULL;
+        }
+    
+        // Parse remaining params (like hit-promotion)
         MEFLICS_2Q_FF_parse_params(cache, cache_specific_params);
-    }
-
-    return cache;
+        return cache;
 }
 
 
@@ -87,25 +135,30 @@ static void MEFLICS_2Q_FF_free(cache_t *cache) {
 }
 
 static bool MEFLICS_2Q_FF_get(cache_t *cache, const request_t *req) {
-    MEFLICS_2Q_FF_print_cache_state(cache);
+    //MEFLICS_2Q_FF_print_cache_state(cache);
     return cache_get_base(cache, req);
 }
 
 static cache_obj_t *MEFLICS_2Q_FF_find(cache_t *cache, const request_t *req, const bool update_cache) {
     MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
 
+    // First queue access count 증가
+    params->first_access_count++;
+
     cache_obj_t *obj = params->first->find(params->first, req, update_cache);
     if (obj) {
-        // 👇 hit 카운트 증가
         obj->hit_count++;
-
+        params->first_hit_count++;
         return obj;
     }
 
+    // Second queue access count 증가
+    params->second_access_count++;
+
     obj = params->second->find(params->second, req, update_cache);
     if (obj) {
-        // 👇 hit 카운트 증가
         obj->hit_count++;
+        params->second_hit_count++;
     }
 
     return obj;

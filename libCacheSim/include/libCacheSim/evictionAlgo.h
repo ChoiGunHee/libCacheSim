@@ -17,6 +17,20 @@ typedef struct {
   cache_obj_t *q_tail;
 } LRU_params_t;
 
+// Gunhee Choi Code
+// MEFLICS-2Q-FF parameter struct
+typedef struct {
+  cache_t *first;
+  cache_t *second;
+  bool enable_hit_promotion;
+
+  int first_hit_count;
+  int second_hit_count;
+  int first_access_count;
+  int second_access_count;
+} MEFLICS_2Q_FF_params_t;
+// end of Gunhee Choi Code
+
 /* used by LFU related */
 typedef struct freq_node {
   int64_t freq;

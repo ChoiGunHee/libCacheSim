@@ -1,5 +1,9 @@
 #include "libCacheSim.h"
 
+extern int choigu_first_hit_count;
+extern int choigu_second_hit_count;
+
+
 int main(int argc, char* argv[]) {
   if (argc != 4) {
     fprintf(stderr, "Usage: %s <workload_file> <cache_size_multiple> <eviction_policy>\n", argv[0]);
@@ -61,6 +65,15 @@ int main(int argc, char* argv[]) {
     default: break;
   }
 
+  // static const char *DEFAULT_CACHE_PARAMS = "first-ratio=0.5,first=FIFO,second=FIFO,hit-promotion=false";
+  // if (strcasecmp(policy_name, "FIFO") == 0) return FIFO_init(params, NULL);
+  // if (strcasecmp(policy_name, "LRU") == 0) return LRU_init(params, NULL);
+  // if (strcasecmp(policy_name, "LFU") == 0) return LFU_init(params, NULL);
+  // if (strcasecmp(policy_name, "ARC") == 0) return ARC_init(params, NULL);
+  // if (strcasecmp(policy_name, "TwoQ") == 0) return TwoQ_init(params, NULL);
+  // if (strcasecmp(policy_name, "LHD") == 0) return LHD_init(params, NULL);
+  // if (strcasecmp(policy_name, "LeCaR") == 0) return LeCaR_init(params, NULL);
+
   if (cache == NULL) {
     fprintf(stderr, "Cache init failed.\n");
     return 1;
@@ -90,6 +103,16 @@ int main(int argc, char* argv[]) {
   printf("Final Hit Ratio: %.4lf\n", (double)n_hit / n_req);
   printf("Final Cache Size: %ld / %ld bytes\n", cache->get_occupied_byte(cache), cache->cache_size);
   printf("Final Number of Objects: %ld\n", cache->get_n_obj(cache));
+
+  MEFLICS_2Q_FF_params_t *params = (MEFLICS_2Q_FF_params_t *)cache->eviction_params;
+  printf("First Queue Accesses: %d, Hits: %d, Hit Rate: %.4lf\n",
+         params->first_access_count, params->first_hit_count,
+         (double)params->first_hit_count / params->first_access_count);
+  
+  printf("Second Queue Accesses: %d, Hits: %d, Hit Rate: %.4lf\n",
+         params->second_access_count, params->second_hit_count,
+         (double)params->second_hit_count / params->second_access_count);
+
   printf("=====================\n");
 
   /* Clean up */
