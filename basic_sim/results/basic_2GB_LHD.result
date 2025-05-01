@@ -1,0 +1,13 @@
+workload : /home/choi_gunhee/data/merged_kvcache_2206.csv
+cache size : 1G*2
+Eviction policy : LHD
+
+=== Final Result ===
+Total Requests: 812630955
+Total Hits: 731163587
+Final Hit Ratio: 0.8997
+Final Cache Size: 2147333668 / 2147483648 bytes
+Final Number of Objects: 11817031
+Total Time: 1174.276 sec
+Throughput: 692027.45 requests/sec
+=====================
