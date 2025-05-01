@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
     default: printf("Unknown eviction policy\n"); break;
   }
 
+  //meta kvcache 202206 prameter
   reader_init_param_t init_params = default_reader_init_params();
   init_params.obj_id_field = 1;
   init_params.obj_size_field = 3;

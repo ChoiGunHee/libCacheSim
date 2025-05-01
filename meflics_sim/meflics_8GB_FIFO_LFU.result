@@ -1,0 +1,340 @@
+workload : /home/choi_gunhee/data/merged_kvcache_2206.csv
+cache size : 1G*8
+First policy : FIFO
+Second policy : LFU
+[Progress] req = 10000000, hit = 7924834 (hit ratio = 0.7925)
+Cache Used Bytes = 1792779564 / 8589934592
+Cache Object Count = 2041789
+------------------------------------------
+[Progress] req = 20000000, hit = 16390444 (hit ratio = 0.8195)
+Cache Used Bytes = 2515385525 / 8589934592
+Cache Object Count = 2835285
+------------------------------------------
+[Progress] req = 30000000, hit = 24921080 (hit ratio = 0.8307)
+Cache Used Bytes = 3135705114 / 8589934592
+Cache Object Count = 3417714
+------------------------------------------
+[Progress] req = 40000000, hit = 33569296 (hit ratio = 0.8392)
+Cache Used Bytes = 3714006430 / 8589934592
+Cache Object Count = 3975211
+------------------------------------------
+[Progress] req = 50000000, hit = 42354412 (hit ratio = 0.8471)
+Cache Used Bytes = 4202719475 / 8589934592
+Cache Object Count = 4521425
+------------------------------------------
+[Progress] req = 60000000, hit = 51217902 (hit ratio = 0.8536)
+Cache Used Bytes = 4644995162 / 8589934592
+Cache Object Count = 5003043
+------------------------------------------
+[Progress] req = 70000000, hit = 60151552 (hit ratio = 0.8593)
+Cache Used Bytes = 5022350081 / 8589934592
+Cache Object Count = 5454414
+------------------------------------------
+[Progress] req = 80000000, hit = 69106642 (hit ratio = 0.8638)
+Cache Used Bytes = 5410468140 / 8589934592
+Cache Object Count = 5825013
+------------------------------------------
+[Progress] req = 90000000, hit = 78011549 (hit ratio = 0.8668)
+Cache Used Bytes = 5782412342 / 8589934592
+Cache Object Count = 6187879
+------------------------------------------
+[Progress] req = 100000000, hit = 86934209 (hit ratio = 0.8693)
+Cache Used Bytes = 6198154905 / 8589934592
+Cache Object Count = 6511902
+------------------------------------------
+[Progress] req = 110000000, hit = 95881851 (hit ratio = 0.8717)
+Cache Used Bytes = 6642576624 / 8589934592
+Cache Object Count = 6784074
+------------------------------------------
+[Progress] req = 120000000, hit = 104887762 (hit ratio = 0.8741)
+Cache Used Bytes = 7046021017 / 8589934592
+Cache Object Count = 7119171
+------------------------------------------
+[Progress] req = 130000000, hit = 113955710 (hit ratio = 0.8766)
+Cache Used Bytes = 7420188633 / 8589934592
+Cache Object Count = 7433552
+------------------------------------------
+[Progress] req = 140000000, hit = 123066145 (hit ratio = 0.8790)
+Cache Used Bytes = 7750786547 / 8589934592
+Cache Object Count = 7728584
+------------------------------------------
+[Progress] req = 150000000, hit = 132201571 (hit ratio = 0.8813)
+Cache Used Bytes = 8098987929 / 8589934592
+Cache Object Count = 7975824
+------------------------------------------
+[Progress] req = 160000000, hit = 141320859 (hit ratio = 0.8833)
+Cache Used Bytes = 8434698904 / 8589934592
+Cache Object Count = 8248388
+------------------------------------------
+[Progress] req = 170000000, hit = 150267996 (hit ratio = 0.8839)
+Cache Used Bytes = 8589301372 / 8589934592
+Cache Object Count = 8444950
+------------------------------------------
+[Progress] req = 180000000, hit = 159160962 (hit ratio = 0.8842)
+Cache Used Bytes = 8589394962 / 8589934592
+Cache Object Count = 8446343
+------------------------------------------
+[Progress] req = 190000000, hit = 168083464 (hit ratio = 0.8846)
+Cache Used Bytes = 8589764258 / 8589934592
+Cache Object Count = 8503507
+------------------------------------------
+[Progress] req = 200000000, hit = 177094329 (hit ratio = 0.8855)
+Cache Used Bytes = 8589631351 / 8589934592
+Cache Object Count = 8512015
+------------------------------------------
+[Progress] req = 210000000, hit = 186226745 (hit ratio = 0.8868)
+Cache Used Bytes = 8589743119 / 8589934592
+Cache Object Count = 8488822
+------------------------------------------
+[Progress] req = 220000000, hit = 195387026 (hit ratio = 0.8881)
+Cache Used Bytes = 8589780472 / 8589934592
+Cache Object Count = 8517194
+------------------------------------------
+[Progress] req = 230000000, hit = 204544436 (hit ratio = 0.8893)
+Cache Used Bytes = 8589549434 / 8589934592
+Cache Object Count = 8632031
+------------------------------------------
+[Progress] req = 240000000, hit = 213715459 (hit ratio = 0.8905)
+Cache Used Bytes = 8589914138 / 8589934592
+Cache Object Count = 8681802
+------------------------------------------
+[Progress] req = 250000000, hit = 222844506 (hit ratio = 0.8914)
+Cache Used Bytes = 8589603950 / 8589934592
+Cache Object Count = 8730525
+------------------------------------------
+[Progress] req = 260000000, hit = 231966879 (hit ratio = 0.8922)
+Cache Used Bytes = 8589344079 / 8589934592
+Cache Object Count = 8760104
+------------------------------------------
+[Progress] req = 270000000, hit = 241085586 (hit ratio = 0.8929)
+Cache Used Bytes = 8589876556 / 8589934592
+Cache Object Count = 8777913
+------------------------------------------
+[Progress] req = 280000000, hit = 250230313 (hit ratio = 0.8937)
+Cache Used Bytes = 8589669561 / 8589934592
+Cache Object Count = 8813998
+------------------------------------------
+[Progress] req = 290000000, hit = 259401376 (hit ratio = 0.8945)
+Cache Used Bytes = 8589654495 / 8589934592
+Cache Object Count = 8857084
+------------------------------------------
+[Progress] req = 300000000, hit = 268604575 (hit ratio = 0.8953)
+Cache Used Bytes = 8589043671 / 8589934592
+Cache Object Count = 8919267
+------------------------------------------
+[Progress] req = 310000000, hit = 277811383 (hit ratio = 0.8962)
+Cache Used Bytes = 8589542831 / 8589934592
+Cache Object Count = 8854676
+------------------------------------------
+[Progress] req = 320000000, hit = 287012169 (hit ratio = 0.8969)
+Cache Used Bytes = 8589418863 / 8589934592
+Cache Object Count = 8793104
+------------------------------------------
+[Progress] req = 330000000, hit = 296090111 (hit ratio = 0.8972)
+Cache Used Bytes = 8589697683 / 8589934592
+Cache Object Count = 8819683
+------------------------------------------
+[Progress] req = 340000000, hit = 305042421 (hit ratio = 0.8972)
+Cache Used Bytes = 8589770670 / 8589934592
+Cache Object Count = 8896732
+------------------------------------------
+[Progress] req = 350000000, hit = 313986342 (hit ratio = 0.8971)
+Cache Used Bytes = 8589302098 / 8589934592
+Cache Object Count = 8997773
+------------------------------------------
+[Progress] req = 360000000, hit = 323004493 (hit ratio = 0.8972)
+Cache Used Bytes = 8589479291 / 8589934592
+Cache Object Count = 9066005
+------------------------------------------
+[Progress] req = 370000000, hit = 332144139 (hit ratio = 0.8977)
+Cache Used Bytes = 8589110647 / 8589934592
+Cache Object Count = 9055808
+------------------------------------------
+[Progress] req = 380000000, hit = 341338357 (hit ratio = 0.8983)
+Cache Used Bytes = 8589325845 / 8589934592
+Cache Object Count = 9080987
+------------------------------------------
+[Progress] req = 390000000, hit = 350537004 (hit ratio = 0.8988)
+Cache Used Bytes = 8589400402 / 8589934592
+Cache Object Count = 9124275
+------------------------------------------
+[Progress] req = 400000000, hit = 359742888 (hit ratio = 0.8994)
+Cache Used Bytes = 8589656314 / 8589934592
+Cache Object Count = 9167181
+------------------------------------------
+[Progress] req = 410000000, hit = 368903034 (hit ratio = 0.8998)
+Cache Used Bytes = 8589532246 / 8589934592
+Cache Object Count = 9227778
+------------------------------------------
+[Progress] req = 420000000, hit = 378050969 (hit ratio = 0.9001)
+Cache Used Bytes = 8589594637 / 8589934592
+Cache Object Count = 9277589
+------------------------------------------
+[Progress] req = 430000000, hit = 387190785 (hit ratio = 0.9004)
+Cache Used Bytes = 8589284525 / 8589934592
+Cache Object Count = 9250410
+------------------------------------------
+[Progress] req = 440000000, hit = 396345787 (hit ratio = 0.9008)
+Cache Used Bytes = 8589408231 / 8589934592
+Cache Object Count = 9281486
+------------------------------------------
+[Progress] req = 450000000, hit = 405539046 (hit ratio = 0.9012)
+Cache Used Bytes = 8589486958 / 8589934592
+Cache Object Count = 9342535
+------------------------------------------
+[Progress] req = 460000000, hit = 414755710 (hit ratio = 0.9016)
+Cache Used Bytes = 8589491851 / 8589934592
+Cache Object Count = 9313602
+------------------------------------------
+[Progress] req = 470000000, hit = 423991603 (hit ratio = 0.9021)
+Cache Used Bytes = 8589718282 / 8589934592
+Cache Object Count = 9225739
+------------------------------------------
+[Progress] req = 480000000, hit = 433230155 (hit ratio = 0.9026)
+Cache Used Bytes = 8589769373 / 8589934592
+Cache Object Count = 9171482
+------------------------------------------
+[Progress] req = 490000000, hit = 442350387 (hit ratio = 0.9028)
+Cache Used Bytes = 8589420738 / 8589934592
+Cache Object Count = 9188261
+------------------------------------------
+[Progress] req = 500000000, hit = 451322698 (hit ratio = 0.9026)
+Cache Used Bytes = 8589638275 / 8589934592
+Cache Object Count = 9351343
+------------------------------------------
+[Progress] req = 510000000, hit = 460317994 (hit ratio = 0.9026)
+Cache Used Bytes = 8589204565 / 8589934592
+Cache Object Count = 9484545
+------------------------------------------
+[Progress] req = 520000000, hit = 469382777 (hit ratio = 0.9027)
+Cache Used Bytes = 8589544934 / 8589934592
+Cache Object Count = 9571588
+------------------------------------------
+[Progress] req = 530000000, hit = 478557190 (hit ratio = 0.9029)
+Cache Used Bytes = 8589203893 / 8589934592
+Cache Object Count = 9578236
+------------------------------------------
+[Progress] req = 540000000, hit = 487776772 (hit ratio = 0.9033)
+Cache Used Bytes = 8589536109 / 8589934592
+Cache Object Count = 9589180
+------------------------------------------
+[Progress] req = 550000000, hit = 497002915 (hit ratio = 0.9036)
+Cache Used Bytes = 8589377648 / 8589934592
+Cache Object Count = 9646669
+------------------------------------------
+[Progress] req = 560000000, hit = 506239991 (hit ratio = 0.9040)
+Cache Used Bytes = 8589837280 / 8589934592
+Cache Object Count = 9737332
+------------------------------------------
+[Progress] req = 570000000, hit = 515441200 (hit ratio = 0.9043)
+Cache Used Bytes = 8589804454 / 8589934592
+Cache Object Count = 9773191
+------------------------------------------
+[Progress] req = 580000000, hit = 524618888 (hit ratio = 0.9045)
+Cache Used Bytes = 8589506932 / 8589934592
+Cache Object Count = 9826906
+------------------------------------------
+[Progress] req = 590000000, hit = 533796702 (hit ratio = 0.9047)
+Cache Used Bytes = 8589354269 / 8589934592
+Cache Object Count = 9828942
+------------------------------------------
+[Progress] req = 600000000, hit = 542985090 (hit ratio = 0.9050)
+Cache Used Bytes = 8589277104 / 8589934592
+Cache Object Count = 9812022
+------------------------------------------
+[Progress] req = 610000000, hit = 552202058 (hit ratio = 0.9052)
+Cache Used Bytes = 8589868999 / 8589934592
+Cache Object Count = 9794598
+------------------------------------------
+[Progress] req = 620000000, hit = 561452353 (hit ratio = 0.9056)
+Cache Used Bytes = 8589741300 / 8589934592
+Cache Object Count = 9767867
+------------------------------------------
+[Progress] req = 630000000, hit = 570713971 (hit ratio = 0.9059)
+Cache Used Bytes = 8589653912 / 8589934592
+Cache Object Count = 9729799
+------------------------------------------
+[Progress] req = 640000000, hit = 579969700 (hit ratio = 0.9062)
+Cache Used Bytes = 8589380454 / 8589934592
+Cache Object Count = 9753978
+------------------------------------------
+[Progress] req = 650000000, hit = 589050407 (hit ratio = 0.9062)
+Cache Used Bytes = 8589752648 / 8589934592
+Cache Object Count = 9904944
+------------------------------------------
+[Progress] req = 660000000, hit = 598024722 (hit ratio = 0.9061)
+Cache Used Bytes = 8589619832 / 8589934592
+Cache Object Count = 10061283
+------------------------------------------
+[Progress] req = 670000000, hit = 607023971 (hit ratio = 0.9060)
+Cache Used Bytes = 8589120115 / 8589934592
+Cache Object Count = 10217951
+------------------------------------------
+[Progress] req = 680000000, hit = 616081914 (hit ratio = 0.9060)
+Cache Used Bytes = 8589908845 / 8589934592
+Cache Object Count = 10308290
+------------------------------------------
+[Progress] req = 690000000, hit = 625272353 (hit ratio = 0.9062)
+Cache Used Bytes = 8589710087 / 8589934592
+Cache Object Count = 10317358
+------------------------------------------
+[Progress] req = 700000000, hit = 634511155 (hit ratio = 0.9064)
+Cache Used Bytes = 8589382402 / 8589934592
+Cache Object Count = 10340340
+------------------------------------------
+[Progress] req = 710000000, hit = 643749632 (hit ratio = 0.9067)
+Cache Used Bytes = 8589560799 / 8589934592
+Cache Object Count = 10418416
+------------------------------------------
+[Progress] req = 720000000, hit = 652996130 (hit ratio = 0.9069)
+Cache Used Bytes = 8589793402 / 8589934592
+Cache Object Count = 10475604
+------------------------------------------
+[Progress] req = 730000000, hit = 662212600 (hit ratio = 0.9071)
+Cache Used Bytes = 8589600172 / 8589934592
+Cache Object Count = 10511932
+------------------------------------------
+[Progress] req = 740000000, hit = 671400637 (hit ratio = 0.9073)
+Cache Used Bytes = 8589082301 / 8589934592
+Cache Object Count = 10552017
+------------------------------------------
+[Progress] req = 750000000, hit = 680565901 (hit ratio = 0.9074)
+Cache Used Bytes = 8589380826 / 8589934592
+Cache Object Count = 10496111
+------------------------------------------
+[Progress] req = 760000000, hit = 689758321 (hit ratio = 0.9076)
+Cache Used Bytes = 8589923002 / 8589934592
+Cache Object Count = 10369462
+------------------------------------------
+[Progress] req = 770000000, hit = 698968561 (hit ratio = 0.9078)
+Cache Used Bytes = 8589363770 / 8589934592
+Cache Object Count = 10348034
+------------------------------------------
+[Progress] req = 780000000, hit = 708219568 (hit ratio = 0.9080)
+Cache Used Bytes = 8589598147 / 8589934592
+Cache Object Count = 10354266
+------------------------------------------
+[Progress] req = 790000000, hit = 717468006 (hit ratio = 0.9082)
+Cache Used Bytes = 8589422121 / 8589934592
+Cache Object Count = 10357598
+------------------------------------------
+[Progress] req = 800000000, hit = 726719808 (hit ratio = 0.9084)
+Cache Used Bytes = 8589484548 / 8589934592
+Cache Object Count = 10376518
+------------------------------------------
+[Progress] req = 810000000, hit = 735852312 (hit ratio = 0.9085)
+Cache Used Bytes = 8589874038 / 8589934592
+Cache Object Count = 10465867
+------------------------------------------
+
+=== Final Result ===
+Total Requests: 812630955
+Total Hits: 738210517
+Final Hit Ratio: 0.9084
+Final Cache Size: 8589758565 / 8589934592 bytes
+Final Number of Objects: 10496158
+Total Time: 887.845 sec
+Throughput: 915284.82 requests/sec
+First Queue Accesses: 812630955, Hits: 102383547, Hit Rate: 0.1260
+Second Queue Accesses: 710247408, Hits: 635826970, Hit Rate: 0.8952
+=====================
